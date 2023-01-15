@@ -6,13 +6,29 @@ from time import sleep
 import undetected_chromedriver.v2 as uc
 from selenium.webdriver.common.by import By
 
-from names import NameSpace, Wait
+from .names import NameSpace, Wait
 
 
 class Bot:
-    def __init__(self, driver, db_name):
+    def __init__(self, driver, db_name, link):
         self.driver = driver
         self.db_name = db_name
+        self.link = link
+        self.props = self.read_link()
+
+    def read_link(self):
+        l = self.link.split('?')
+        larr = l[0].split('/')
+        props = l[1].split('&')
+        props = {p.split('=')[0]: p.split('=')[1] for p in props}
+
+        route_dict = {
+            'site': larr[2],
+            'type': larr[5],  # oneway
+            'route': '/'.join([larr[7], larr[9]])
+        }
+        route_dict.update(props)
+        return route_dict
 
     def scrap_att(self, name_space, key, att):
         # Scrap element's attribute.
@@ -84,8 +100,7 @@ if __name__ == '__main__':
         driver = uc.Chrome()
         for l in links:
             # Variables.
-            bot = Bot(driver, 'travels.db')
-            destination = '/'.join([l.split('/')[7], l.split('/')[-1].split('?')[0]])
+            bot = Bot(driver, 'travels.db', l)
             names_dict = NameSpace.xpath_dict
             results = {}
 
@@ -96,7 +111,7 @@ if __name__ == '__main__':
             sleep(Wait.extra_long)
 
             # Scrap.
-            results.update({'route': destination})
+            results.update({'route': bot.props['route']})
             results.update({'search_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
             for space in names_dict:
                 if space in ['to_carrier_xpath', 'from_carrier_xpath']:
@@ -105,9 +120,3 @@ if __name__ == '__main__':
                     results.update(bot.scrap_txt(names_dict[space], space.replace('_xpath', '')))
 
             bot.save_to_db(results)
-
-
-
-
-
-

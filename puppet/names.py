@@ -4,6 +4,11 @@ class Wait:
     extra_long = 10
 
 class NameSpace:
+    carrier_dict = {
+        'Ryanair': ['FR'],
+        'Eurowings': ['EW'],
+        'Lufthansa': ['LH']
+    }
     base = '/html/body/fsr-app/fsr-flights-search-result/fsr-qsf-layout/section/div/flights-list/'
     xpath_dict = {
         'to_departure_xpath': [

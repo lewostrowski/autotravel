@@ -20,8 +20,7 @@
             <!-- data row -->
             <div class="row">
                 <div class="col">
-                    <select class="form-select">
-                          <option selected>--</option>
+                    <select id="select_filter" class="form-select" onchange="reload(this)">
                     </select>
                     <table class="table">
                         <thead>
@@ -33,7 +32,14 @@
             </div>
         </div>
     </body>
-    <script src="sync.js"></script>
+    <script src="{{ url_for('static', filename='sync.js') }}"></script>
+    <script>
+        externalOperator({{ df|tojson }}, 'all');
+        reload = (element) => {
+            var val = element.value
+            externalOperator({{ df|tojson }}, val)
+        }
+    </script>
 
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"

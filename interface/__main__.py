@@ -1,6 +1,5 @@
-from flask import Flask
+from flask import Flask, sessions, render_template
 from flask_cors import CORS
-from flask_restful import Resource, Api
 import json
 import pandas as pd
 import sqlite3
@@ -9,17 +8,25 @@ from uuid import uuid4
 app = Flask(__name__)
 app.secret_key = str(uuid4())
 CORS(app)
-api = Api(app)
 
 
-class Home(Resource):
-    def get(self):
-        db = sqlite3.connect('travels.db')
-        df = pd.read_sql('select * from routes order by search_date desc limit 50', db)
-        return json.loads(df.to_json(orient='records')), 200
+@app.route("/")
+def home():
+    db = sqlite3.connect('travels.db')
+    df = pd.DataFrame()
+    try:
+        df = pd.read_sql('select * from routes order by search_date desc limit 100', db)
+    except pd.errors.DatabaseError as er:
+        print(er)
+    finally:
+        if not df.empty:
+            df = json.loads(df.to_json(orient='records'))
+            return render_template('index.html', df=df)
+        else:
+            place_holder = {'route': ['empty']}
+            df = json.loads(pd.DataFrame(place_holder).to_json(orient='records'))
+            return render_template('index.html', df=df)
 
-
-api.add_resource(Home, '/')
 
 if __name__ == '__main__':
     app.run(debug=True)
