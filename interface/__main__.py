@@ -15,7 +15,14 @@ def home():
     db = sqlite3.connect('travels.db')
     df = pd.DataFrame()
     try:
-        df = pd.read_sql('select * from routes order by search_date desc limit 100', db)
+        # select route, search_date, to_departure, to_arrival, to_direct, price, to_carrier
+        query = """
+        select *
+        from routes 
+        order by search_date desc 
+        limit 100
+        """
+        df = pd.read_sql(query, db)
     except pd.errors.DatabaseError as er:
         print(er)
     finally:

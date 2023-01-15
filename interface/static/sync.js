@@ -40,7 +40,7 @@ class PrintData {
         this.clearState('table_head')
         this.heads.forEach((k) => {
             var head = document.createElement('th')
-            head.innerText = k
+            head.innerText = k.toUpperCase().replace('_', ' ')
             document.getElementById('table_head').appendChild(head)
         })
 
