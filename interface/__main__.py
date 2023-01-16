@@ -15,9 +15,9 @@ def home():
     db = sqlite3.connect('travels.db')
     df = pd.DataFrame()
     try:
-        # select route, search_date, to_departure, to_arrival, to_direct, price, to_carrier
+        # type, departure_date do query
         query = """
-        select *
+        select route, search_date, to_departure, to_direct, price, to_carrier
         from routes 
         order by search_date desc 
         limit 100

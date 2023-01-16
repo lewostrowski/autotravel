@@ -113,6 +113,7 @@ if __name__ == '__main__':
             # Scrap.
             results.update({'route': bot.props['route']})
             results.update({'type': bot.props['type']})
+            results.update({'departure_date': bot.props['departureDate']})
             results.update({'search_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
             for space in names_dict:
                 if space in ['to_carrier_xpath', 'from_carrier_xpath']:
