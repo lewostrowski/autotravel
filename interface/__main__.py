@@ -1,9 +1,11 @@
-from flask import Flask, sessions, render_template
+from flask import Flask, render_template
 from flask_cors import CORS
 import json
 import pandas as pd
 import sqlite3
 from uuid import uuid4
+
+from common import notify
 
 app = Flask(__name__)
 app.secret_key = str(uuid4())
@@ -12,7 +14,8 @@ CORS(app)
 
 @app.route("/")
 def home():
-    db = sqlite3.connect('travels.db')
+    db_name = 'travels.db'
+    db = sqlite3.connect(db_name)
     df = pd.DataFrame()
     try:
         # type, departure_date do query
@@ -28,7 +31,8 @@ def home():
     finally:
         if not df.empty:
             df = json.loads(df.to_json(orient='records'))
-            return render_template('index.html', df=df)
+            bargain = notify.check_bargain(db_name, False)
+            return render_template('index.html', df=df, bargain=bargain)
         else:
             place_holder = {'route': ['empty']}
             df = json.loads(pd.DataFrame(place_holder).to_json(orient='records'))

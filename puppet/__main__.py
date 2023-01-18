@@ -6,7 +6,8 @@ from time import sleep
 import undetected_chromedriver.v2 as uc
 from selenium.webdriver.common.by import By
 
-from .names import NameSpace, Wait
+from common import notify
+from puppet.names import NameSpace, Wait
 
 
 class Bot:
@@ -98,9 +99,11 @@ if __name__ == '__main__':
     # Starts main scraping if server responded and file contain links.
     if links and code:
         driver = uc.Chrome()
+        db_name = 'travels.db'
+
         for l in links:
             # Variables.
-            bot = Bot(driver, 'travels.db', l)
+            bot = Bot(driver, db_name, l)
             names_dict = NameSpace.xpath_dict
             results = {}
 
@@ -122,3 +125,5 @@ if __name__ == '__main__':
                     results.update(bot.scrap_txt(names_dict[space], space.replace('_xpath', '')))
 
             bot.save_to_db(results)
+
+        notify.check_bargain(db_name, True)

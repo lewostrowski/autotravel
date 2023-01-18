@@ -11,14 +11,35 @@
 
     <body>
         <div class="'container">
-            <!-- bargain row -->
+            <!-- bargain rows -->
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <span id="bargain">bargain</span>
+                    <h3 style="text-align: center;">Bargains</h3>
+                    <hr style="margin: 0px 0px 15px 0px">
                 </div>
             </div>
+            <div class="row justify-content-center">
+                {% for route in bargain['routes'] %}
+                    {% if route[3] %}
+                        <div class="col-2">
+                            <div class="card">
+                                <div class="card-body" style="text-align: center;">
+                                    <h4>{{ route[0] }}</h4>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Bargain check: {{ bargain['current_date'] }}</li>
+                                        <li class="list-group-item">Average price: {{ route[1] }}</li>
+                                        <li class="list-group-item"><b>Current price: {{ route[2] }}</b></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
 
-            <!-- data row -->
+            <div class="row" style="margin: 15px 0px"></div>
+
+            <!-- data rows -->
             <div class="row justify-content-center">
                 <div class="col-6">
                     <h3 style="text-align: center;">All results</h3>
