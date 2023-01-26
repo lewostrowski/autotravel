@@ -1,5 +1,7 @@
 from datetime import datetime
+import os
 import pandas as pd
+import random
 import requests
 import sqlite3
 from time import sleep
@@ -67,6 +69,7 @@ class Bot:
         try:
             # Click 'more option' and then 'save' on Cookie banner. This will disable most of the cookies.
             self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]').click()
+            print('Puppet: rejecting cookies')
             sleep(Wait.short)
             self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[3]/div[2]/button').click()
         except:
@@ -74,13 +77,24 @@ class Bot:
 
 
 if __name__ == '__main__':
+    # time randomizer & screen on/off
+    hold_sec = random.randint(30, 40)
+    print('Puppet: current time is {}'.format(datetime.now().strftime('%H:%M:%S')))
+    print('Puppet: sleeping for {} seconds'.format(str(hold_sec)))
+    sleep(hold_sec)
+
+    os.system('xset dpms force on')
+    print('Puppet: screen on')
+
     # Read links.
     with open('links.txt', 'r') as lines:
         links = [line for line in lines]
+        print('Puppet: {} links to fetch'.format(str(len(links))))
 
     # Check if file contain links.
     if not links:
-        print('No links in file.')
+        print('Puppet: links.txt is empty or does not exist')
+        print('Puppet: aborting')
         quit()
 
     # Check site status.
@@ -93,8 +107,12 @@ if __name__ == '__main__':
         print(e)
     finally:
         if code != 200:
-            print('Unable to reach server with code: %s' % code)
+            print('Puppet: unable to reach server - code: %s' % code)
+            print('Puppet: aborting')
             quit()
+        else:
+
+            print('Puppet: target site responding')
 
     # Starts main scraping if server responded and file contain links.
     if links and code:
@@ -103,9 +121,11 @@ if __name__ == '__main__':
 
         for l in links:
             # Variables.
+            l_index = links.index(l)
             bot = Bot(driver, db_name, l)
             names_dict = NameSpace.xpath_dict
             results = {}
+            print('Puppet: entering site {}/{}'.format(str(l_index + 1), str(len(links) + 1)))
 
             # Get site and close Cookie banner if appears.
             driver.get(l)
@@ -125,5 +145,9 @@ if __name__ == '__main__':
                     results.update(bot.scrap_txt(names_dict[space], space.replace('_xpath', '')))
 
             bot.save_to_db(results)
+            print('Puppet: route {} saved'.format(results['route']))
 
         notify.check_bargain(db_name, True)
+
+        os.system('xset dpms force off')
+        print('Puppet: screen off')

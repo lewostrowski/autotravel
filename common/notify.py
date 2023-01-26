@@ -17,6 +17,7 @@ def send_message(message_props):
     with smtplib.SMTP_SSL(props['server'], props['port'], context=context) as server:
         server.login(props['sender'], props['pass'])
         for receiver in props['receivers'].split(','):
+            print('Notify: sending message to: {}'.format(receiver))
             server.sendmail(props['sender'], receiver, message)
 
 
