@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Display option.
+export DISPLAY=:0
+
 # Python venv activate.
 source ../bin/activate
 echo "Launcher: venv activate"
