@@ -83,9 +83,6 @@ if __name__ == '__main__':
     print('Puppet: sleeping for {} minutes'.format(str(hold_sec/60)))
     sleep(hold_sec)
 
-    os.system('xset dpms force on')
-    print('Puppet: screen on')
-
     # Read links.
     with open('links.txt', 'r') as lines:
         links = [line for line in lines]
@@ -148,6 +145,3 @@ if __name__ == '__main__':
             print('Puppet: route {} saved'.format(results['route']))
 
         notify.check_bargain(db_name, True)
-
-        os.system('xset dpms force off')
-        print('Puppet: screen off')
