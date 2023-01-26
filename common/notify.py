@@ -11,7 +11,7 @@ def send_message(message_props):
 
     message = """
     The price of %s is now %s (average %s).
-    """ % message_props
+    """ % message_props[0:3]
 
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL(props['server'], props['port'], context=context) as server:
