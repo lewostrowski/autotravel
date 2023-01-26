@@ -78,9 +78,9 @@ class Bot:
 
 if __name__ == '__main__':
     # time randomizer & screen on/off
-    hold_sec = random.randint(30, 40)
+    hold_sec = random.randint(30, 3600)
     print('Puppet: current time is {}'.format(datetime.now().strftime('%H:%M:%S')))
-    print('Puppet: sleeping for {} seconds'.format(str(hold_sec)))
+    print('Puppet: sleeping for {} minutes'.format(str(hold_sec/60)))
     sleep(hold_sec)
 
     os.system('xset dpms force on')
