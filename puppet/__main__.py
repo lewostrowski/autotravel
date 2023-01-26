@@ -125,7 +125,7 @@ if __name__ == '__main__':
             bot = Bot(driver, db_name, l)
             names_dict = NameSpace.xpath_dict
             results = {}
-            print('Puppet: entering site {}/{}'.format(str(l_index + 1), str(len(links) + 1)))
+            print('Puppet: entering site {}/{}'.format(str(l_index + 1), str(len(links))))
 
             # Get site and close Cookie banner if appears.
             driver.get(l)

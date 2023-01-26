@@ -42,9 +42,9 @@ def check_bargain(db_name, notify):
 
         route_info = (
             route,
-            df['price'].mean(),
+            df['price'].astype(float).mean(),
             df['price'].values[0],
-            True if float(df['price'].values[0]) < df['price'].mean() else False
+            True if float(df['price'].values[0]) < df['price'].astype(float).mean() else False
         )
 
         info['routes'].append(route_info)
