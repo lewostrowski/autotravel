@@ -23,7 +23,7 @@ xset dpms force off
 echo "Launcher: screen off"
 
 # Shedule next run.
-minutes=$(echo $((11 + $RANDOM % 3)))
+minutes=$(echo $((12 + $RANDOM % 2)))
 hours=$(echo $((50 + $RANDOM % 21)))
 hold=(($minutes * $hours))
 
