@@ -23,8 +23,8 @@ xset dpms force off
 echo "Launcher: screen off"
 
 # Shedule next run.
-hold=$(echo $((43200 + $RANDOM % 3600)))
-at now + "$hold" minutes -f ./launcher.sh
+hold=$(echo $((700 + $RANDOM % 760)))
+at now + "$hold" minutes -f ./launcher.sh 
 
 next=$(atq | awk '{print $5}')
 echo "Launcher: next run scheduled at $next"
