@@ -24,6 +24,7 @@ echo "Launcher: screen off"
 
 # Shedule next run.
 hold=$(echo $((43200 + $RANDOM % 3600)))
-systemd-run --no-ask-password --on-active=$hold ./launcher.sh
+at now + "$hold" minutes -f ./launcher.sh
 
-echo "Launcher: next run will start in $hold seconds"
+next=$(atq | awk '{print $5}')
+echo "Launcher: next run scheduled at $next"
