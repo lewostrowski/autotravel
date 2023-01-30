@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 import os
 import pandas as pd
 import random
@@ -69,28 +70,35 @@ class Bot:
         try:
             # Click 'more option' and then 'save' on Cookie banner. This will disable most of the cookies.
             self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/button[1]').click()
-            print('Puppet: rejecting cookies')
+            logging.info('Puppet, rejecting cookies')
             sleep(Wait.short)
             self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[3]/div[2]/button').click()
         except:
             pass
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  
+    # init logging
+    logging.basicConfig(format='%(asctime)s, %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        filename='logbook.log',
+                        force=True,
+                        level=logging.INFO)
+
     # time randomizer & screen on/off
     hold_sec = random.randint(1, 60)
-    print('Puppet: sleeping for {} seconds'.format(str(hold_sec/60)))
+    logging.info('Puppet, sleeping for {} seconds'.format(str(hold_sec/60)))
     sleep(hold_sec)
 
     # Read links.
     with open('links.txt', 'r') as lines:
         links = [line for line in lines]
-        print('Puppet: {} links to fetch'.format(str(len(links))))
+        logging.info('Puppet, {} links to fetch'.format(str(len(links))))
 
     # Check if file contain links.
     if not links:
-        print('Puppet: links.txt is empty or does not exist')
-        print('Puppet: aborting')
+        logging.error('Puppet, links.txt is empty or does not exist')
+        logging.info('Puppet, aborting')
         quit()
 
     # Check site status.
@@ -100,15 +108,14 @@ if __name__ == '__main__':
         response = requests.get('/'.join(links[0].split('/')[0:3]))
         code = response.status_code
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logging.info(e)
     finally:
         if code != 200:
-            print('Puppet: unable to reach server - code: %s' % code)
-            print('Puppet: aborting')
+            logging.error('Puppet, unable to reach server - code: %s' % code)
+            logging.info('Puppet, aborting')
             quit()
         else:
-
-            print('Puppet: target site responding')
+            logging.info('Puppet, target site responding')
 
     # Starts main scraping if server responded and file contain links.
     if links and code:
@@ -121,7 +128,7 @@ if __name__ == '__main__':
             bot = Bot(driver, db_name, l)
             names_dict = NameSpace.xpath_dict
             results = {}
-            print('Puppet: entering site {}/{}'.format(str(l_index + 1), str(len(links))))
+            logging.info('Puppet, entering site {}/{}'.format(str(l_index + 1), str(len(links))))
 
             # Get site and close Cookie banner if appears.
             driver.get(l)
@@ -141,6 +148,6 @@ if __name__ == '__main__':
                     results.update(bot.scrap_txt(names_dict[space], space.replace('_xpath', '')))
 
             bot.save_to_db(results)
-            print('Puppet: route {} saved'.format(results['route']))
+            logging.info('Puppet, route {} saved'.format(results['route']))
 
         notify.check_bargain(db_name, True)

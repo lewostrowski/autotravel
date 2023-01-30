@@ -13,7 +13,7 @@
         <div class="'container">
             <!-- bargain rows -->
             <div class="row justify-content-center">
-                <div class="col-6">
+                <div class="col-10 col-md-6">
                     <h3 style="text-align: center;">Bargains</h3>
                     <hr style="margin: 0px 0px 15px 0px">
                 </div>
@@ -21,7 +21,7 @@
             <div class="row justify-content-center">
                 {% for route in bargain['routes'] %}
                     {% if route[3] %}
-                        <div class="col-2">
+                        <div class="col-5 col-md-3">
                             <div class="card">
                                 <div class="card-body" style="text-align: center;">
                                     <h4>{{ route[0] }}</h4>
@@ -41,14 +41,14 @@
 
             <!-- data rows -->
             <div class="row justify-content-center">
-                <div class="col-6">
+                <div class="col-10 col-md-6">
                     <h3 style="text-align: center;">All results</h3>
                     <hr style="margin: 0px 0px 15px 0px">
                     <select id="select_filter" class="form-select" onchange="reload(this)"></select>
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-6">
+                <div class="col-10 col-md-6">
                     <table class="table table-sm table-striped table-bordered border-dark"
                            style="margin: 15px 0px; max-height: 500px; overflow: scroll; text-align: center;">
                         <thead style="background-color: #729367;">
