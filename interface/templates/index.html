@@ -63,7 +63,7 @@
 
         </div>
     </body>
-    <script src="{{ url_for('static', filename='interface/sync.js') }}"></script>
+    <script src="{{ url_for('static', filename='sync.js') }}"></script>
     <script>
         externalOperator({{ df|tojson }}, 'all');
         reload = (element) => {
