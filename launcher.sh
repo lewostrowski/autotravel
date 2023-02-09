@@ -29,5 +29,5 @@ log "screen off"
 
 # Schedule next run.
 at now + "$((700 + RANDOM % 60))" minutes -f ./launcher.sh
-next=$(atq | awk '{print $5}')
+next=$(atq | awk '{print $3, $4, $5}')
 log "next run $next"
