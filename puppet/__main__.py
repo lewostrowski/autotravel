@@ -6,7 +6,7 @@ import random
 import requests
 import sqlite3
 from time import sleep
-import undetected_chromedriver.v2 as uc
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 
 from common import notify
